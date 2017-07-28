@@ -129,7 +129,14 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuConvert">
+     <property name="title">
+      <string>Convert</string>
+     </property>
+     <addaction name="actionDTA"/>
+    </widget>
     <addaction name="actionOpen"/>
+    <addaction name="menuConvert"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -145,6 +152,11 @@
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+  </action>
+  <action name="actionDTA">
+   <property name="text">
+    <string>DTA</string>
    </property>
   </action>
  </widget>

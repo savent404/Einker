@@ -3,6 +3,7 @@
 
 #include "QDebug"
 #include <QFileDialog>
+#include "dta.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,13 +31,8 @@ void MainWindow::on_actionOpen_triggered()
         return;
     }
 
-    qDebug() << "Open file: " << filepath;
-
-    // 读取图片并显示
     QImage image;
-    if (!image.load(filepath))
-    {
-        qDebug() << "Can't open file: " << filepath;
+    if (!image.load(filepath))  {
         return;
     }
 
@@ -51,5 +47,23 @@ void MainWindow::on_actionOpen_triggered()
 
     ui->label_value_w->setText(QString::number(image.width(), 10));
     ui->label_value_h->setText(QString::number(image.height(), 10));
-    ui->label_value_color->setText((QString::number(image.format(), 10)));
+    ui->label_value_color->setText((QString::number(image.depth(), 10)));
+}
+
+void MainWindow::on_actionDTA_triggered()
+{
+    QString save_path = QFileDialog::getSaveFileName(
+                this,
+                tr("Save DTA file"),
+                ".",
+                tr("Image files(*.dta"));
+
+    DTA file(sPathBMP);
+
+    if (file.convert(save_path)){
+        qDebug() << "Convert DTA file OK";
+    }
+    else{
+        qDebug() << "Fail to convert DTA file";
+    }
 }

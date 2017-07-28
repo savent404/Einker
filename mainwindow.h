@@ -20,6 +20,8 @@ public:
 private slots:
     void on_actionOpen_triggered();
 
+    void on_actionDTA_triggered();
+
 private:
     Ui::MainWindow *ui;
     QString sPathBMP;
