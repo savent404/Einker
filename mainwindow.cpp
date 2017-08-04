@@ -4,6 +4,7 @@
 #include "QDebug"
 #include <QFileDialog>
 #include "dta.h"
+#include "QMessageBox"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -52,13 +53,32 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionDTA_triggered()
 {
+    DTA file(sPathBMP);
+    if (int8_t res = file.check() != 0)
+    {
+        QString message;
+        if (res == 1) {
+            message += tr("颜色个数应为:4(颜色深度:2)");
+        }
+        else if (res == 2)
+        {
+            message += tr("图片大小:");
+            message += QString::number(file.getHeight());
+            message += tr(" x ");
+            message += QString::number(file.getWith());
+            message += tr("\r\n应为600x800或800x600");
+        }
+
+        QMessageBox::warning(this, tr("图片格式错误"),
+                             message, QMessageBox::Yes);
+        qDebug() << "Format Error";
+        return;
+    }
     QString save_path = QFileDialog::getSaveFileName(
                 this,
                 tr("Save DTA file"),
                 ".",
                 tr("Image files(*.dta"));
-
-    DTA file(sPathBMP);
 
     if (file.convert(save_path)){
         qDebug() << "Convert DTA file OK";

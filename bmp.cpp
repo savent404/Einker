@@ -34,6 +34,11 @@ int BMP::getBitPerPixel()
     return BMP_Info.biBitCount;
 }
 
+int BMP::getClrUsed()
+{
+    return BMP_Info.biClrUsed;
+}
+
 int BMP::getLineOffset(int line)
 {
     if (getHeight() < 0) {

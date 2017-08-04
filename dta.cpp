@@ -10,23 +10,26 @@ DTA::~DTA()
     close();
 }
 
-bool DTA::check()
+int8_t DTA::check()
 {
+    if ( (getBitPerPixel() != 4)||
+         (getClrUsed() != 4))
+        return 1;
     if ( (abs(getWith()) == 600 && abs(getHeight()) == 800) ||
          (abs(getWith()) == 800 && abs(getHeight()) == 600))
-         return true;
-    else return false;
+         return 0;
+    else return 2;
 }
 
 uint8_t DTA::_convert(uint8_t buf[])
 {
-    uint16_t _buf = buf[0] << 8 | buf[1];
+    uint16_t _buf = *(uint16_t*)buf;
     uint8_t ret = 0;
 
-    ret |= ((_buf & 0x3000) >> 12) << 6;
-    ret |= ((_buf & 0x0300) >> 8) << 4;
-    ret |= ((_buf & 0x0030) >> 4) << 2;
-    ret |= ((_buf & 0x0003) >> 0) << 0;
+    ret |= ((_buf & 0x3000) >> 12) << 2;
+    ret |= ((_buf & 0x0300) >> 8) << 0;
+    ret |= ((_buf & 0x0030) >> 4) << 6;
+    ret |= ((_buf & 0x0003) >> 0) << 4;
 
     return ret;
 }

@@ -50,6 +50,7 @@ public:
     int getWith();
     int getHeight();
     int getBitPerPixel();
+    int getClrUsed();
 private:
     BMP_Header_Typedef_t BMP_Header;
     BMP_Info_Typedef_t   BMP_Info;
