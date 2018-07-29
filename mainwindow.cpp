@@ -74,12 +74,12 @@ void MainWindow::on_actionType2_triggered()
     QImage img(img1.width(), img1.height(), QImage::Format_ARGB32);
     for (int i = 0; i < img.width(); i++)
         for (int j = 0; j < img.height(); j++) {
-            if (img2.pixelColor(i, j) != qRgb(255,255,255))
-                img.setPixelColor(i, j, img2.pixelColor(i,j));
-            else if (img1.pixelColor(i, j) != qRgb(255,255,255))
-                img.setPixelColor(i, j, img1.pixelColor(i,j));
+            if (img2.pixel(i, j) != qRgb(255,255,255))
+                img.setPixel(i, j, img2.pixel(i,j));
+            else if (img1.pixel(i, j) != qRgb(255,255,255))
+                img.setPixel(i, j, img1.pixel(i,j));
             else
-                img.setPixelColor(i, j, qRgb(255,255,255));
+                img.setPixel(i, j, qRgb(255,255,255));
         }
     QGraphicsScene *scene = new QGraphicsScene;
     scene->addPixmap(QPixmap::fromImage(img));
@@ -143,7 +143,7 @@ void MainWindow::on_actionConvert_2_triggered()
             return;
 
         auto func = [](QImage img, int i, int j) {
-            if (img.pixelColor(i, j) != qRgb(255,255,255)) {
+            if (img.pixel(i, j) != qRgb(255,255,255)) {
                 return 1;
             } else {
                 return 0;
@@ -152,9 +152,10 @@ void MainWindow::on_actionConvert_2_triggered()
 
         QImage img1 = convert2Bit1(file_1, qRgb(0, 0, 0));
         QImage img2 = convert2Bit1(file_2, qRgb(255,0,0));
-        if (img1.width() != img1.width() || img2.height() != img2.height()
-                || (img1.width() == 300 && img1.height() == 400)
-                || (img1.height() == 300 && img1.width() == 300)) {
+        if (img1.width() != img2.width() ||
+            img1.height() != img2.height() ||
+            !((img1.width() == 300 && img1.height() == 400) ||
+            (img1.height() == 300 && img1.width() == 400))) {
             QMessageBox::warning(this, "Wrong size of Image", "Wrong size of Image");
             return;
         }
