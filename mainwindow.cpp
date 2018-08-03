@@ -163,28 +163,58 @@ void MainWindow::on_actionConvert_2_triggered()
         file.open(QFile::WriteOnly);
         int cnt = 0;
         uint8_t buf = 0;
-        for (int i = 0; i < img1.width(); i++) {
-            for (int j = 0; j < img1.height(); j++) {
-                buf <<= 1;
-                buf |= func(img1, i, j);
-                if (++cnt >= 8) {
-                    cnt = 0;
-                    file.write((const char*)&buf, 1);
-                    buf = 0;
+
+        if (img1.height() > img1.height())
+        {
+            for (int i = 0; i < img1.height(); i++) {
+                for (int j = 0; j < img1.width(); j++) {
+                    buf <<= 1;
+                    buf |= func(img1, j, i);
+                    if (++cnt >= 8) {
+                        cnt = 0;
+                        file.write((const char*)&buf, 1);
+                        buf = 0;
+                    }
+                }
+            }
+            for (int i = 0; i < img1.height(); i++) {
+                for (int j = 0; j < img1.width(); j++) {
+                    buf <<= 1;
+                    buf |= func(img2, j, i);
+                    if (++cnt >= 8) {
+                        cnt = 0;
+                        file.write((const char*)&buf, 1);
+                        buf = 0;
+                    }
                 }
             }
         }
-        for (int i = 0; i < img1.width(); i++) {
-            for (int j = 0; j < img1.height(); j++) {
-                buf <<= 1;
-                buf |= func(img2, i, j);
-                if (++cnt >= 8) {
-                    cnt = 0;
-                    file.write((const char*)&buf, 1);
-                    buf = 0;
+        else
+        {
+            for (int i = 0; i < img1.width(); i++) {
+                for (int j = 0; j < img1.height(); j++) {
+                    buf <<= 1;
+                    buf |= func(img1, i, j);
+                    if (++cnt >= 8) {
+                        cnt = 0;
+                        file.write((const char*)&buf, 1);
+                        buf = 0;
+                    }
+                }
+            }
+            for (int i = 0; i < img1.width(); i++) {
+                for (int j = 0; j < img1.height(); j++) {
+                    buf <<= 1;
+                    buf |= func(img2, i, j);
+                    if (++cnt >= 8) {
+                        cnt = 0;
+                        file.write((const char*)&buf, 1);
+                        buf = 0;
+                    }
                 }
             }
         }
+
         file.close();
         break;
     }
