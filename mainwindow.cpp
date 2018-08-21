@@ -65,21 +65,22 @@ void MainWindow::on_actionType2_triggered()
     if (file_2.isEmpty()) {
         return;
     }
-    QImage img1 = convert2Bit1(file_1, qRgb(0, 0, 0));
+    QImage img1 = convert2Bit1(file_1, qRgb(255, 255, 255));
     QImage img2 = convert2Bit1(file_2, qRgb(200, 0, 0));
     if (img1.width() != img2.width() || img1.height() != img2.height()) {
         QMessageBox::warning(this, "Wrong Picture", "");
         return;
     }
     QImage img(img1.width(), img1.height(), QImage::Format_ARGB32);
+    QRgb black = qRgb(0, 0, 0);
     for (int i = 0; i < img.width(); i++)
         for (int j = 0; j < img.height(); j++) {
-            if (img2.pixel(i, j) != qRgb(255,255,255))
-                img.setPixel(i, j, img2.pixel(i,j));
-            else if (img1.pixel(i, j) != qRgb(255,255,255))
-                img.setPixel(i, j, img1.pixel(i,j));
+            if (img2.pixel(i, j) != black)
+                img.setPixel(i, j, img2.pixel(i, j));
+            else if (img1.pixel(i, j) != black)
+                img.setPixel(i, j, img1.pixel(i, j));
             else
-                img.setPixel(i, j, qRgb(255,255,255));
+                img.setPixel(i, j, black);
         }
     QGraphicsScene *scene = new QGraphicsScene;
     scene->addPixmap(QPixmap::fromImage(img));
@@ -123,7 +124,8 @@ void MainWindow::on_actionConvert_2_triggered()
         for (int j = 0; j < img.height(); j++) {
             for (int i = 0; i < img.width(); i++) {
                 buf <<= 2;
-                buf |= func(img.pixelIndex(i, j));
+//                buf |= func(img.pixelIndex(i, j));
+                buf |= func(img.pixelColor(i, j).red());
                 if (++cnt >= 4) {
                     cnt = 0;
                     file.write((const char*)&buf, 1);
@@ -143,7 +145,7 @@ void MainWindow::on_actionConvert_2_triggered()
             return;
 
         auto func = [](QImage img, int i, int j) {
-            if (img.pixel(i, j) != qRgb(255,255,255)) {
+            if (img.pixel(i, j) != qRgb(0, 0, 0)) {
                 return 1;
             } else {
                 return 0;
