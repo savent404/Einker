@@ -29,12 +29,14 @@ private:
         if (!img.load(imgPath)) {
             return img;
         }
-        img = img.convertToFormat(QImage::Format_Indexed8);
-        img.setColorCount(256);
-        for (int i = 0; i < 256; i++) {
-            int c = (i/64)*64;
-            img.setColor(i, qRgb(c, c, c));
-        }
+        for (int i = 0; i < img.width(); i++)
+            for (int j = 0; j < img.height(); j++)
+            {
+                int gray = qGray(img.pixel(i,j));
+                gray /= 64;
+                gray *= 64;
+                img.setPixelColor(i, j, QColor(gray, gray, gray));
+            }
         return img;
     }
     QImage convert2Bit1(const QString& imgPath, const QRgb rgb) {
@@ -42,15 +44,15 @@ private:
         if (!img.load(imgPath)) {
             return img;
         }
-        img = img.convertToFormat(QImage::Format_Indexed8);
-        img.setColorCount(256);
-        for (int i = 0; i < 256; i++) {
-            if (i < 128) {
-                img.setColor(i, qRgb(255,255,255));
-            } else {
-                img.setColor(i, rgb);
+        for (int i = 0; i < img.width(); i++)
+            for (int j = 0; j < img.height(); j++)
+            {
+                int gray = qGray(img.pixel(i,j));
+                if (gray < 128)
+                    img.setPixelColor(i, j, QColor(0, 0, 0));
+                else
+                    img.setPixelColor(i, j, rgb);
             }
-        }
         return img;
     }
 
